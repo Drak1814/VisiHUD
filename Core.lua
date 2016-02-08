@@ -73,7 +73,7 @@ end)
 
 local Options = CreateFrame("Frame", "VisiHUDOptions")
 Options:Hide()
-Options.name = "oUF Drak"
+Options.name = "VisiHUD"
 InterfaceOptions_AddCategory(Options)
 
 function Loader:ADDON_LOADED(event, addon)
@@ -189,7 +189,7 @@ function Loader:ADDON_LOADED(event, addon)
 	Options:SetScript("OnShow", function(self)
 		debug("Loading Options")
 		VisiHUD = ns
-		local loaded, reason = LoadAddOn(_name .. "_Config")
+		local loaded, reason = LoadAddOn(_name .. "_Options")
 		if not loaded then
 			local text = self:CreateFontString(nil, nil, "GameFontHighlight")
 			text:SetPoint("BOTTOMLEFT", 16, 16)
@@ -226,8 +226,8 @@ function Loader:ADDON_LOADED(event, addon)
 		elseif cmd == "move" then
 			ns.ToggleGrabbers()
 		else
-			InterfaceOptionsFrame_OpenToCategory("oUF Drak")
-			InterfaceOptionsFrame_OpenToCategory("oUF Drak")
+			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
+			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
 		end
 	end
 	
