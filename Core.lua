@@ -199,8 +199,8 @@ function Loader:ADDON_LOADED(event, addon)
 		end
 	end)
 
-	SLASH_OUFDrak1 = "/douf"
-	function SlashCmdList.OUFDrak(cmd)
+	SLASH_VisiHUD1 = "/visihud"
+	function SlashCmdList.VisiHUD(cmd)
 		cmd = strlower(cmd)
 		debug("SlashCmdList", cmd)
 		if cmd == "buffs" or cmd == "debuffs" then
