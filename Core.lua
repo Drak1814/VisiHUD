@@ -670,8 +670,7 @@ function ns.saveUnitPosition(unit, point, x, y, scale)
 end
 ]=]
 
--- Attempt to figure out a more sane name to display
-ns.nameCache = {}
+-- Attempt to figure out a sane name to display
 function ns.smartName(obj, header)
 	if type(obj) == 'string' then
 		return obj
