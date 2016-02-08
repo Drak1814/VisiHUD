@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------]]
 
 local _, ns = ...
@@ -112,7 +112,7 @@ function ns.CreateBorder(self, size, offset, parent, layer)
 
 	for i = 1, #sections do
 		local x = self:CreateTexture(nil, layer or "ARTWORK")
-		x:SetTexture([[Interface\AddOns\oUF_Drak\media\SimpleSquare]])
+		x:SetTexture([[Interface\AddOns\VisiHUD\media\SimpleSquare]])
 		t[sections[i]] = x
 	end
 
@@ -171,7 +171,7 @@ function ns.CreateBorder(self, size, offset, parent, layer)
 --[[
 	local glow = self:CreateTexture(nil, "BACKGROUND")
 	glow:SetPoint("CENTER")
-	glow:SetTexture("Interface\\AddOns\\oUF_Drak\\media\\frameGlow")
+	glow:SetTexture("Interface\\AddOns\\VisiHUD\\media\\frameGlow")
 	glow:SetWidth(self:GetWidth() / 225 * 256)
 	glow:SetHeight(self:GetHeight() / 30 * 64)
 	glow:Hide()

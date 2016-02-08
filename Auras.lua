@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------
 	Filter settings stored as bitfields.
 	0x MODE EXTRAUNIT ROLEx2 SOURCEx2 DESTx2
@@ -951,8 +951,8 @@ ns.UpdateAuraList = function()
 	--print("UpdateAuraList")
 	wipe(auraList)
 	AddAurasToList(ns.defaultAuras)
-	AddAurasToList(oUFDrakAuraConfig.customFilters)
-	for id in pairs(oUFDrakAuraConfig.deleted) do
+	AddAurasToList(VisiHUDAuraConfig.customFilters)
+	for id in pairs(VisiHUDAuraConfig.deleted) do
 		auraList[id] = nil
 	end
 

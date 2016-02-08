@@ -1,8 +1,6 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
-	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	VisiHUD
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------
 	Element to show Wild Mushrooms like combo points.
 

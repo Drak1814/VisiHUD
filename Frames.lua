@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------]]
 
 local _, ns = ...
@@ -776,7 +776,7 @@ function ns.Factory(dUF)
 
 	for unit, udata in pairs(uconfig) do
 		if not udata.disable then
-			local name = "oUFDrak" .. unit:gsub("%a", strupper, 1):gsub("target", "Target"):gsub("pet", "Pet")
+			local name = "VisiHUD" .. unit:gsub("%a", strupper, 1):gsub("target", "Target"):gsub("pet", "Pet")
 			if udata.point then
 				if udata.attributes then
 					debug("Creating Header", name)
@@ -788,7 +788,7 @@ function ns.Factory(dUF)
 				else
 					debug("Creating Frame", name)
 					local frame = dUF:Spawn(unit, name)
-					frame:SetParent(oUFDrak_CombatShowFrame)
+					frame:SetParent(VisiHUD_CombatShowFrame)
 					ns.frames[unit] = frame
 				end
 			end

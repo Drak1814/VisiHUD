@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------]]
 
 local _name, ns = ...
@@ -71,7 +71,7 @@ end)
 
 -- create Options frame
 
-local Options = CreateFrame("Frame", "oUFDrakOptions")
+local Options = CreateFrame("Frame", "VisiHUDOptions")
 Options:Hide()
 Options.name = "oUF Drak"
 InterfaceOptions_AddCategory(Options)
@@ -94,16 +94,16 @@ function Loader:ADDON_LOADED(event, addon)
 	end
 
 	-- Global settings:
-	oUFDrakConfig = initDB(oUFDrakConfig, ns.configDefault)
-	ns.config = oUFDrakConfig
+	VisiHUDConfig = initDB(VisiHUDConfig, ns.configDefault)
+	ns.config = VisiHUDConfig
 
 	-- Global unit settings:
-	oUFDrakUnitConfig = initDB(oUFDrakUnitConfig, ns.uconfigDefault)
-	ns.uconfig = oUFDrakUnitConfig
+	VisiHUDUnitConfig = initDB(VisiHUDUnitConfig, ns.uconfigDefault)
+	ns.uconfig = VisiHUDUnitConfig
 
 	-- Aura settings stored per character:
 	local AURA_CONFIG_VERSION = 3
-	oUFDrakAuraConfig = initDB(oUFDrakAuraConfig, {
+	VisiHUDAuraConfig = initDB(VisiHUDAuraConfig, {
 		customFilters = {},
 		deleted = {},
 	})
@@ -111,12 +111,12 @@ function Loader:ADDON_LOADED(event, addon)
 	debug("ADDON_LOADED")
 	
 	-- Remove default values
-	for id, flag in pairs(oUFDrakAuraConfig.customFilters) do
+	for id, flag in pairs(VisiHUDAuraConfig.customFilters) do
 		if flag == ns.defaultAuras[id] then
-			oUFDrakAuraConfig.customFilters[id] = nil
+			VisiHUDAuraConfig.customFilters[id] = nil
 		end
 	end
-	oUFDrakAuraConfig.VERSION = AURA_CONFIG_VERSION
+	VisiHUDAuraConfig.VERSION = AURA_CONFIG_VERSION
 	ns.UpdateAuraList()
 
 	-- SharedMedia
@@ -125,8 +125,8 @@ function Loader:ADDON_LOADED(event, addon)
 	if Media then
 
 		Media:Register("statusbar", "Flat", [[Interface\BUTTONS\WHITE8X8]])
-		Media:Register("statusbar", "Neal", [[Interface\AddOns\oUF_Drak\Media\Neal]])
-		--Media:Register("border", "SimpleSquare", [[Interface\AddOns\oUF_Drak\Media\SimpleSquare.tga]])
+		Media:Register("statusbar", "Neal", [[Interface\AddOns\VisiHUD\Media\Neal]])
+		--Media:Register("border", "SimpleSquare", [[Interface\AddOns\VisiHUD\Media\SimpleSquare.tga]])
 
 		Media.RegisterCallback(_name, "LibSharedMedia_Registered", function(callback, mediaType, key)
 			--debug(callback, mediaType, key)
@@ -188,14 +188,14 @@ function Loader:ADDON_LOADED(event, addon)
 	-- Load options on demand
 	Options:SetScript("OnShow", function(self)
 		debug("Loading Options")
-		oUFDrak = ns
+		VisiHUD = ns
 		local loaded, reason = LoadAddOn(_name .. "_Config")
 		if not loaded then
 			local text = self:CreateFontString(nil, nil, "GameFontHighlight")
 			text:SetPoint("BOTTOMLEFT", 16, 16)
 			text:SetPoint("TOPRIGHT", -16, -16)
-			text:SetFormattedText(ADDON_LOAD_FAILED, _name .. "_Config", _G[reason])
-			oUFDrak = nil
+			text:SetFormattedText(ADDON_LOAD_FAILED, _name .. "_Options", _G[reason])
+			VisiHUD = nil
 		end
 	end)
 
@@ -221,8 +221,8 @@ function Loader:ADDON_LOADED(event, addon)
 				DEFAULT_CHAT_FRAME:AddMessage(format("|cff00ddba" .. _name .. ":|r Your current target does not have any %s.", cmd))
 			end
 		elseif cmd == "debug" then
-			oUFDrakConfig.debug = not oUFDrakConfig.debug
-			print(_name .. ": Debugging " .. (oUFDrakConfig.debug and "Enable" or "Disabled"))
+			VisiHUDConfig.debug = not VisiHUDConfig.debug
+			print(_name .. ": Debugging " .. (VisiHUDConfig.debug and "Enable" or "Disabled"))
 		elseif cmd == "move" then
 			ns.ToggleGrabbers()
 		else
@@ -268,8 +268,8 @@ function Loader:PLAYER_LOGOUT(event)
 		return db
 	end
 
-	oUFDrakConfig = cleanDB(oUFDrakConfig, ns.configDefault)
-	oUFDrakUnitConfig = cleanDB(oUFDrakUnitConfig, ns.uconfigDefault)
+	VisiHUDConfig = cleanDB(VisiHUDConfig, ns.configDefault)
+	VisiHUDUnitConfig = cleanDB(VisiHUDUnitConfig, ns.uconfigDefault)
 end
 
 ------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	https://github.com/Drak1814/oUF_Drak
+	VisiHUD
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------
 	Element to display demonic fury on oUF frames.
 

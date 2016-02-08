@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------]]
 
 local _, ns = ...
@@ -22,11 +22,11 @@ function Orbs.Create(parent, num, size, statusbar, orientation, reverse, style)
 
 		orb.bg = orb:CreateTexture(nil, "BACKGROUND")
 		orb.bg:SetAllPoints(true)
-		orb.bg:SetTexture("Interface\\AddOns\\oUF_Drak\\media\\OrbBG")
+		orb.bg:SetTexture("Interface\\AddOns\\VisiHUD\\media\\OrbBG")
 
 		orb.fg = orb:CreateTexture(nil, "ARTWORK")
 		orb.fg:SetAllPoints(true)
-		orb.fg:SetTexture("Interface\\AddOns\\oUF_Drak\\media\\OrbFG")
+		orb.fg:SetTexture("Interface\\AddOns\\VisiHUD\\media\\OrbFG")
 
 		if statusbar then
 			local spiral = CreateFrame("Cooldown", nil, orb)

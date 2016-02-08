@@ -1,7 +1,6 @@
 -- based on dUF_GCD by Exactly.
 --[[--------------------------------------------------------------------
 	VisiHUD
-	dUF-based Combat HUD for PvE.
 	https://github.com/VisiHUD1814/VisiHUD
 ----------------------------------------------------------------------
 	Global Cooldown Bar.

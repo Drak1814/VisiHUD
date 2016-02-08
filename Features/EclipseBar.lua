@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	oUF_Drak
-	oUF-based Combat HUD for PvE.
+	VisiHUD
+	High visibility combat HUD for World of Warcraft
 	Copyright (c) 2016 Drak <drak@derpydo.com>. All rights reserved.
-	https://github.com/Drak1814/oUF_Drak
+	https://github.com/Drak1814/VisiHUD
 ----------------------------------------------------------------------]]
 
 if select(2, UnitClass("player")) ~= "DRUID" then return end
@@ -24,14 +24,14 @@ local NORMAL = 0.8
 local DIMMED = 0.5
 
 local function PostUpdateVisibility(self, unit)
-	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4foUF_Drak:|r", tostringall("EclipseBar PostUpdateVisibility", self:IsShown())))
+	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4fVisiHUD:|r", tostringall("EclipseBar PostUpdateVisibility", self:IsShown())))
 	self.isHidden = not self:IsShown()
 	self:PostUnitAura(unit)
 end
 
 local function PostUpdatePower(self, unit, power, maxPower)
 	if not power or self.isHidden then return end
-	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4foUF_Drak:|r", tostringall("EclipseBar PostUpdatePower", power, maxPower)))
+	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4fVisiHUD:|r", tostringall("EclipseBar PostUpdatePower", power, maxPower)))
 	local x = (power / maxPower) * (self:GetWidth() / 2)
 	self.lunarBG:SetPoint("RIGHT", self, "CENTER", x, 0)
 end
@@ -39,7 +39,7 @@ end
 local function PostUnitAura(self, unit)
 	if self.isHidden then return end
 	local hasLunarEclipse, hasSolarEclipse = self.hasLunarEclipse, self.hasSolarEclipse
-	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4foUF_Drak:|r", tostringall("EclipseBar PostUnitAura", hasLunarEclipse, hasSolarEclipse)))
+	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4fVisiHUD:|r", tostringall("EclipseBar PostUnitAura", hasLunarEclipse, hasSolarEclipse)))
 
 	if hasLunarEclipse then
 		self.lunarBG:SetVertexColor(LUNAR_COLOR[1] * DIMMED, LUNAR_COLOR[2] * DIMMED, LUNAR_COLOR[3] * DIMMED)
@@ -56,7 +56,7 @@ end
 local function PostDirectionChange(self, unit)
 	if self.isHidden then return end
 	local direction = GetEclipseDirection()
-	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4foUF_Drak:|r", tostringall("EclipseBar PostDirectionChanged", direction)))
+	--ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4fVisiHUD:|r", tostringall("EclipseBar PostDirectionChanged", direction)))
 
 	local coords = ECLIPSE_MARKER_COORDS[direction]
 	self.directionArrow:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
