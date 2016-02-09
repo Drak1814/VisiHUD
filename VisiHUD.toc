@@ -1,9 +1,7 @@
 ## Interface: 60200
-## Version: 2.0-beta1
-## X-Curse-Packaged-Version: 2.0
+## Version: 2.0-beta2
 ## X-Curse-Project-Name: VisiHUD
 ## X-Curse-Project-ID: visihud
-## X-Curse-Repository-ID: wow/visihud/mainline
 
 ## Title: VisiHUD
 ## Notes: High visibility combat HUD for World of Warcraft
