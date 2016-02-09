@@ -265,7 +265,7 @@ local function Spawn(self, unit, isSingle)
 	-----------------
 	-- Threat text --
 	-----------------
-	if unit == "target" then
+	if unit == "target" and config.threatLevels then
 		self.ThreatText = ns.CreateFontString(self.overlay, 16, "RIGHT")
 		self.ThreatText:SetPoint("CENTER", self, "BOTTOM", 0, 0)
 		self:Tag(self.ThreatText, "[threatpct]")
