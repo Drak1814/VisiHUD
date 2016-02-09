@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Defaults.lua' />
 	<Script file='Core.lua'/>
+	<Script file='Movers.lua' />
 	<Script file='Auras.lua' />
 	<Script file='Functions.lua' />
 	<Script file='Frames.lua' />
