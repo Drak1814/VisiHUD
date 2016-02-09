@@ -223,7 +223,7 @@ function Loader:ADDON_LOADED(event, addon)
 			VisiHUDConfig.debug = not VisiHUDConfig.debug
 			print(_name .. ": Debugging " .. (VisiHUDConfig.debug and "Enable" or "Disabled"))
 		elseif cmd == "move" then
-			ns.ToggleGrabbers()
+			ns.ToggleMovers()
 		else
 			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
 			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
