@@ -1,0 +1,3 @@
+[submodule "Embeds/oUF"]
+	path = Embeds/oUF
+	url = https://github.com/Drak1814/oUF.git
