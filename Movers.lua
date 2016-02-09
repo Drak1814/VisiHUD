@@ -1,5 +1,6 @@
 -- Custom Frame Positions
 local _name, ns = ...
+local debug = ns.debug
 
 ns.moverPool = {}
 
@@ -8,6 +9,7 @@ function ns.getPosition(obj, anchor)
 	debug("getPosition", obj.unit)
 	
 	if not anchor then
+	
 		local UIx, UIy = UIParent:GetCenter()
 		local Ox, Oy = obj:GetCenter()
 
@@ -44,12 +46,12 @@ function ns.getPosition(obj, anchor)
 			y = Oy - UIy
 		end
 
-		return { point = point, parent = 'UIParent', x = x, y = y }
+		return { point = point, relative = 'UIParent', rpoint = point, x = x, y = y }
 
 	else
 
-		local point, parent, _, x, y = anchor:GetPoint()
-		return { point = point, parent = 'UIParent', x = x, y = y }
+		local point, relative, rpoint, x, y = anchor:GetPoint()
+		return { point = point, relative = relative, rpoint = rpoint, x = x, y = y }
 	
 	end
 	
@@ -75,9 +77,9 @@ function ns.restorePosition(obj)
 		obj._SetPoint = obj.SetPoint
 		obj.SetPoint = ns.restorePosition
 	end
-	target:ClearAllPoints()
+	obj:ClearAllPoints()
 
-	target:_SetPoint(pos.point, pos.parent, pos.point, pos.x, pos.y)
+	obj:_SetPoint(pos.point, pos.relative, pos.rpoint, pos.x, pos.y)
 	
 end
  
@@ -105,7 +107,7 @@ function ns.savePosition(obj, anchor)
 	
 	if not ns.uconfig[unit] then ns.uconfig[unit] = {} end
 	if not ns.uconfig[unit].position then ns.uconfig[unit].position = {} end
-	ns.uconfig[unit].position.custom = ns.getPosition(isHeader or obj, anchor)
+	ns.uconfig[unit].position.custom = ns.getPosition(obj, anchor)
 	
 end
 
@@ -116,10 +118,9 @@ function ns.saveUnitPosition(unit, point, x, y, scale)
 	if not ns.uconfig[unit].position then ns.uconfig[unit].position = {} end	
 	ns.uconfig[unit].position.custom = {
 		point = point,
-		parent = 'UIParent',
+		relative = 'UIParent',
 		x = x,
-		y = y,
-		scale = scale
+		y = y
 	}
 end
 ]=]
@@ -138,8 +139,11 @@ end
 
 function ns.getMover(obj)
 
+	local unit = obj.unit
+	if not unit then return end
+
 	if not obj:GetCenter() then return end
-	if ns.moverPool[target] then return ns.moverPool[target] end
+	if ns.moverPool[unit] then return ns.moverPool[unit] end
 
 	local mover = CreateFrame("Frame")
 	mover:SetParent(UIParent)
@@ -147,7 +151,7 @@ function ns.getMover(obj)
 
 	mover:SetBackdrop({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background"})
 	mover:SetFrameStrata('TOOLTIP')
-	mover:SetAllPoints(target)
+	mover:SetAllPoints(obj)
 
 	mover:EnableMouse(true)
 	mover:SetMovable(true)
@@ -162,8 +166,6 @@ function ns.getMover(obj)
 
 	mover.name = name
 	mover.obj = obj
-	mover.header = isHeader
-	mover.target = target
 
 	mover:SetBackdropBorderColor(0, .9, 0)
 	mover:SetBackdropColor(0, .9, 0)
@@ -171,7 +173,7 @@ function ns.getMover(obj)
 	mover.baseWidth, mover.baseHeight = obj:GetSize()
 
 	mover:SetScript("OnShow", function(self)
-		return self.name:SetText(ns.smartName(self.obj, self.header))
+		return self.name:SetText(ns.smartName(self.obj))
 	end)
 	
 	mover:SetScript("OnHide",  function(self)
@@ -188,9 +190,8 @@ function ns.getMover(obj)
 		ns.saveDefaultPosition(self.obj)
 		self:StartMoving()
 
-		local frame = self.header or self.obj
-		frame:ClearAllPoints()
-		frame:SetAllPoints(self)
+		self.obj:ClearAllPoints()
+		self.obj:SetAllPoints(self)
 	end)
 	
 	mover:SetScript("OnDragStop", function(self)
@@ -201,10 +202,10 @@ function ns.getMover(obj)
 		-- edit positions through the UI.
 		ns.restorePosition(self.obj)
 		self:ClearAllPoints()
-		self:SetAllPoints(self.header or self.obj)
+		self:SetAllPoints(self.obj)
 	end)
 	
-	ns.moverPool[target] = mover
+	ns.moverPool[unit] = mover
 
 	return mover
 	
@@ -229,7 +230,7 @@ function ns.ToggleMovers()
 		end
 		ns.anchor = true
 	else
-		for _, mover in pairs(ns.moverPool) do
+		for unit, mover in pairs(ns.moverPool) do
 			mover:Hide()
 		end
 		ns.anchor = nil
