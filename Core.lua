@@ -146,7 +146,7 @@ function Loader:ADDON_LOADED(event, addon)
 	end
 	
 	-- FastFocus Key
-	if (ns.config.fastfocus) then
+	if (ns.config.fastFocus) then
 		debug("Enabling FastFocus")
 		--Blizzard raid frame
 		hooksecurefunc("CompactUnitFrame_SetUpFrame", function(frame, ...)
@@ -240,7 +240,7 @@ end
 
 function Loader:PLAYER_ENTERING_WORLD(event)
 	debug(event)
-	if (ns.config.expandzoom) then
+	if (ns.config.expandZoom) then
 		debug("Expanding Zoom")
 		ConsoleExec("CameraDistanceMaxFactor 3")
 		ConsoleExec("CameraDistanceMoveSpeed 40")
