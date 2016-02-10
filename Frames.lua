@@ -86,7 +86,7 @@ local function Spawn(self, unit, isSingle)
 	-------------------------
 	-- Health bar and text --
 	-------------------------
-	local health = ns.CreateStatusBar(self, 24, "RIGHT")
+	local health = ns.CreateStatusBar(self, 20, "RIGHT")
 	health:SetPoint("TOPLEFT", self, "TOPLEFT", 1, -1)
 	health:SetPoint("TOPRIGHT", self, "TOPRIGHT", -1, -1)
 	health:SetPoint("BOTTOM", self, "BOTTOM", 0, 1)
@@ -240,22 +240,22 @@ local function Spawn(self, unit, isSingle)
 	-- Name text, Level text --
 	---------------------------
 	if unit == "target" or unit == "focus" then
-		self.Level = ns.CreateFontString(self.overlay, 13, "LEFT")
+		self.Level = ns.CreateFontString(self.overlay, 14, "LEFT")
 		self.Level:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 2, -1) -- -4
 		self:Tag(self.Level, "[difficulty][level][shortclassification]")
 
-		self.Name = ns.CreateFontString(self.overlay, 16, "LEFT")
+		self.Name = ns.CreateFontString(self.overlay, 18, "LEFT")
 		self.Name:SetPoint("LEFT", self.Level, "RIGHT", 1, 0)
 		self.Name:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -2, -2) -- -5
 		self:Tag(self.Name, "[unitcolor][name]")
 	elseif unit ~= "player" and not strmatch(unit, "pet") then
-		self.Name = ns.CreateFontString(self.overlay, 16, "LEFT")
+		self.Name = ns.CreateFontString(self.overlay, 18, "LEFT")
 		self.Name:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 2, -2)
 		self.Name:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -2, -2) -- -5
 		self:Tag(self.Name, "[unitcolor][name]")
 --[[
 		elseif unit == "player" then
-		self.Name = ns.CreateFontString(self.overlay, 16, "LEFT")
+		self.Name = ns.CreateFontString(self.overlay, 18, "LEFT")
 		self.Name:SetPoint("LEFT", self.Resting, "RIGHT", 1, 0)
 		self.Name:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -30, -2)
 		self:Tag(self.Name, "[unitcolor][name]")
@@ -705,7 +705,7 @@ local function Spawn(self, unit, isSingle)
 	-- Element: Combat text --
 	--------------------------
 	if uconfig.combatText and not strmatch(unit, ".target$") then
-		self.CombatText = ns.CreateFontString(self.overlay, 22, "CENTER")
+		self.CombatText = ns.CreateFontString(self.overlay, 18, "CENTER")
 		if unit == "pet" then
 			self.CombatText:SetPoint("LEFT", 2, -1)
 		else

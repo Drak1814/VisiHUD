@@ -113,7 +113,7 @@ function ns.AddCastbar(self)
 		tinsert(ns.statusbars, SafeZone)
 		Castbar.SafeZone = SafeZone
 
-		Castbar.Time = ns.CreateFontString(Castbar, 20, "RIGHT")
+		Castbar.Time = ns.CreateFontString(Castbar, 16, "RIGHT")
 		Castbar.Time:SetPoint("RIGHT", Castbar, "RIGHT", -4, 0)
 		Castbar.Text = ns.CreateFontString(Castbar, 16, "LEFT")
 		Castbar.Text:SetPoint("LEFT", Castbar, "LEFT", 4, 0)
