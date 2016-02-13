@@ -1,5 +1,5 @@
 ## Interface: 60200
-## Version: 2.0-beta3
+## Version: 2.0-beta4
 ## X-Curse-Project-Name: VisiHUD
 ## X-Curse-Project-ID: visihud
 
