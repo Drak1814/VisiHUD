@@ -53,6 +53,14 @@ ns.configDefault = {
 
 	PVP = false, -- enable PVP mode, currently only affects aura filtering
 	
+	filter = {
+		enable = true,
+		player = true,
+		boss = true,
+		class = false,
+		temp = true
+	},
+	
 	fastFocus = true,
 	expandZoom = true,
 	debug = false
