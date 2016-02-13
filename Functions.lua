@@ -94,7 +94,7 @@ end
 
 function ns.UpdateBorder(self)
 	local threat, debuff, dispellable = self.threatLevel, self.debuffType, self.debuffDispellable
-	debug("UpdateBorder", self.unit, "threatLevel", threat, "debuffType", debuff, "debuffDispellable", dispellable)
+	--debug("UpdateBorder", self.unit, "threatLevel", threat, "debuffType", debuff, "debuffDispellable", dispellable)
 
 	local color, glow
 	if debuff and dispellable then
@@ -204,7 +204,7 @@ do
 	    = UnitHealth, UnitHealthMax, UnitGetTotalAbsorbs, UnitGetIncomingHeals
 
 	function ns.HealPrediction_Override(self, event, unit)
-		debug("HealPrediction Override", event, unit)
+		--debug("HealPrediction Override", event, unit)
 		local element = self.HealPrediction
 		local parent = self.Health
 
@@ -397,7 +397,7 @@ end
 ------------------------------------------------------------------------
 
 function ns.DemonicFury_PostUpdate(bar, fury, maxFury, inMetamorphosis)
-	debug("DemonicFury PostUpdate", fury, maxFury, inMetamorphosis)
+	--debug("DemonicFury PostUpdate", fury, maxFury, inMetamorphosis)
 	bar.value:SetFormattedText("%.0f%%", fury / maxFury)
 end
 
@@ -425,7 +425,7 @@ function ns.Stagger_PostUpdate(bar, maxHealth, stagger, staggerPercent, r, g, b)
 	if staggerPercent < 5 then
 		return bar:Hide()
 	end
-	debug("Stagger PostUpdate", stagger, staggerPercent)
+	--debug("Stagger PostUpdate", stagger, staggerPercent)
 	bar.value:SetFormattedText("%.0f%%", staggerPercent)
 	bar:Show()
 end
@@ -437,7 +437,7 @@ end
 local PLAYER_FACTION = UnitFactionGroup("player")
 
 function ns.PvP_PostUpdate(element, status)
-	debug("PvP PostUpdate", element.__owner.unit, status)
+	--debug("PvP PostUpdate", element.__owner.unit, status)
 	if not status then return end
 	if status == PLAYER_FACTION then
 		return element:Hide()
@@ -554,7 +554,7 @@ function ns.Threat_Override(frame, event, unit)
 	end
 
 	if frame.threatLevel == status then return end
-	debug("ThreatHighlightOverride", frame.unit, status)
+	--debug("ThreatHighlightOverride", frame.unit, status)
 
 	frame.threatLevel = status
 	frame:UpdateBorder()
@@ -568,7 +568,7 @@ function ns.DispelHighlight_Override(element, debuffType, canDispel)
 	local frame = element.__owner
 
 	if frame.debuffType == debuffType then return end
-	debug("DispelHighlightOverride", unit, debuffType, canDispel)
+	--debug("DispelHighlightOverride", unit, debuffType, canDispel)
 
 	frame.debuffType = debuffType
 	frame.debuffDispellable = canDispel

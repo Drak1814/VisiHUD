@@ -6,7 +6,7 @@ ns.moverPool = {}
 
 function ns.getPosition(obj, anchor)
 
-	debug("getPosition", obj.unit)
+	--debug("getPosition", obj.unit)
 	
 	if not anchor then
 	
@@ -63,7 +63,7 @@ function ns.restorePosition(obj)
 	local unit = obj.unit
 	if not unit then return end
 	
-	debug("restorePosition", unit)
+	--debug("restorePosition", unit)
 	
 	-- We've not saved any custom position for this style.
 	if not ns.uconfig[unit] 
@@ -88,7 +88,7 @@ function ns.saveDefaultPosition(obj)
 	local unit = obj.unit
 	if not unit then return end
 	
-	debug("saveDefaultPosition", unit)
+	--debug("saveDefaultPosition", unit)
 	
 	if not ns.uconfig[unit] then ns.uconfig[unit] = {} end
 	if not ns.uconfig[unit].position then ns.uconfig[unit].position = {} end
@@ -103,7 +103,7 @@ function ns.savePosition(obj, anchor)
 	local unit = obj.unit
 	if not unit then return end
 	
-	debug("savePosition", unit)
+	--debug("savePosition", unit)
 	
 	if not ns.uconfig[unit] then ns.uconfig[unit] = {} end
 	if not ns.uconfig[unit].position then ns.uconfig[unit].position = {} end

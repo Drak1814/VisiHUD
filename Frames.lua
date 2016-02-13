@@ -779,14 +779,14 @@ function ns.Factory(dUF)
 			local name = "VisiHUD" .. unit:gsub("%a", strupper, 1):gsub("target", "Target"):gsub("pet", "Pet")
 			if udata.point then
 				if udata.attributes then
-					debug("Creating Header", name)
+					--debug("Creating Header", name)
 					local w = config.width  * (udata.width  or 1)
 					local h = config.height * (udata.height or 1)
 					ns.headers[unit] = dUF:SpawnHeader(name, nil, udata.visible,
 						"dUF-initialConfigFunction", format(initialConfigFunction, w, h, w, h),
 						unpack(udata.attributes))
 				else
-					debug("Creating Frame", name)
+					--debug("Creating Frame", name)
 					local frame = dUF:Spawn(unit, name)
 					frame:SetParent(VisiHUD_CombatShowFrame)
 					ns.frames[unit] = frame
