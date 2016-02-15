@@ -10,51 +10,93 @@ local _, playerClass = UnitClass("player")
 local debug = ns.debug
 
 ------------------------------------------------------------------------
--- dynamic rules: all auras shown by default, 
--- filtered by player-cast OR boss-cast AND temporary
+
+local aura = {
+	class = {
+		DRUID = {
+			-- feral
+			5217, -- Tiger's Fury
+			58180, -- Infected Wounds
+			69369, -- Predatory Swiftness
+			135700, -- Clearcasting
+			-- guardian 
+			158792, -- Pulverize
+			159233, -- Ursa Major
+			135286, -- Tooth & Claw
+			63058, -- Glyph of Barkskin
+		},
+	},
+	trinket = {
+		183926, -- Malicious Censor
+		184073, -- Prophecy of Fear
+	},
+	enchant = { 
+		159234, -- Mark of the Thunderlord
+		159675, -- Mark of Warsong
+		173322, -- Mark of Bleeding Hollow
+		159676, -- Mark of the Frostwolf
+		159679, -- Mark of Blackrock
+		159678, -- Mark of Shadowmoon
+		159238, -- Mark of the Shattered Hand
+	},
+}
 
 local override = {
 	player = { -- applied by player
-		[127372] = true -- Unstable Serum (Klaxxi Enhancement: Raining Blood)
+		127372, -- Unstable Serum (Klaxxi Enhancement: Raining Blood)
 	},
 	boss = { -- applied by boss
-		[106648] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-		[106784] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-		[123059] = true -- Destabilize (Amber-Shaper Un'sok)
+		106648, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+		106784, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+		123059, -- Destabilize (Amber-Shaper Un'sok)
 	},
 	temp = { -- temporary auras
 	},
-	class = { -- class procs
-		DRUID = {
-			-- feral
-			[58180] = true, -- Infected Wounds
-			[69369] = true, -- Predatory Swiftness
-			[135700] = true, -- Clearcasting
-			-- guardian 
-			[158792] = true, -- Pulverize
-			[159233] = true, -- Ursa Major
-			[135286] = true, -- Tooth & Claw
-			[63058] = true, -- Glyph of Barkskin
-		}
-	},
 	always = { -- whitelist
-		[178776] = true, -- Rune of Power (Crit)
+		178776, -- Rune of Power (Crit)
 	},
 	never = { -- blacklist
-		[116631] = true, -- Colossus
-		[118334] = true, -- Dancing Steel (agi)
-		[118335] = true, -- Dancing Steel (str)
-		[104993] = true, -- Jade Spirit
-		[116660] = true, -- River's Song
-		[104509] = true, -- Windsong (crit)
-		[104423] = true, -- Windsong (haste)
-		[104510] = true, -- Windsong (mastery)
-		-- trinkets
-		[183926] = true, -- Malicious Censor
+		116631, -- Colossus
+		118334, -- Dancing Steel (agi)
+		118335, -- Dancing Steel (str)
+		104993, -- Jade Spirit
+		116660, -- River's Song
+		104509, -- Windsong (crit)
+		104423, -- Windsong (haste)
+		104510, -- Windsong (mastery)
 	}
 }
 
+local auraDB = {}
+
 ns.UpdateAuraList = function()
+	
+	auraDB = {}
+	
+	-- compile the aura DB
+	for c, t in pairs(aura) do
+		if type(t) == 'table' then
+			if not auraDB[c] then auraDB[c] = {} end
+			for s, v in pairs(t) do
+				if type(v) == 'number' then auraDB[c][v] = true end
+				if type(v) == 'table' then
+					if not auraDB[c][s] then auraDB[c][s] = {} end
+					for _, v in pairs(v) do
+						if type(v) == 'number' then auraDB[c][s][v] = true end
+					end
+				end
+			end			
+		end
+	end
+	for c, t in pairs(override) do
+		if type(t) == 'table' then
+			if not auraDB[c] then auraDB[c] = {} end
+			for _, v in pairs(t) do
+				if type(v) == 'number' then auraDB[c][v] = true end
+			end			
+		end
+	end
+	
 	-- Update all the things
 	for _, obj in pairs(dUF.objects) do
 		if obj.Auras then
@@ -70,6 +112,12 @@ ns.UpdateAuraList = function()
 end
 
 local unitIsPlayer = { player = true, pet = true, vehicle = true }
+local unitIsParty = { party1 = true, party2 = true, party3 = true, party4 = true,
+	raid1 = true, raid2 = true, raid3 = true, raid4 = true, raid5 = true, raid6 = true, raid7 = true, raid8 = true, raid9 = true, raid10 = true,
+	raid11 = true, raid12 = true, raid13 = true, raid14 = true, raid15 = true, raid16 = true, raid17 = true, raid18 = true, raid19 = true, raid20 = true,
+	raid21 = true, raid22 = true, raid23 = true, raid24 = true, raid25 = true, raid26 = true, raid27 = true, raid28 = true, raid29 = true, raid30 = true,
+	raid31 = true, raid32 = true, raid33 = true, raid34 = true, raid35 = true, raid36 = true, raid37 = true, raid38 = true, raid39 = true, raid40 = true }
+local unitIsBoss = { boss1 = true, boss2 = true, boss3 = true, boss4 = true }
 	
 local function smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, isPlayer)
 	--[[
@@ -80,73 +128,46 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	local filter = ns.config.filter
 	local _, playerClass = UnitClass("player")
 	local show = false
-	if filter.player then
-		if isPlayer or override.player[spellID] then show = true end
-	end
-	if filter.boss then
-		if isBoss or override.boss[spellID] then show = true end
-	end
-	if filter.temp and show then
-		if (not duration or duration == 0 or duration > 30) and not override.temp[spellID] then show = false end
-	end
+	local isTemp = (duration and duration > 0 and duration <= 30) or (auraDB.temp and auraDB.temp[spellID])
+	local isBoss = isBoss or unitIsBoss[caster]
+	local isPlayer = isPlayer or unitIsPlayer[caster]
+	local isParty = unitIsParty[caster]
+	
+	-- Temporary player applied auras
+	if filter.player and (isPlayer or (auraDB.player and auraDB.player[spellID])) and isTemp then show = true end
+	-- All boss applied auras
+	if filter.boss and (isBoss or (auraDB.boss and auraDB.boss[spellID])) then show = true end
+	-- Temporary auras on player, except for party
+	if filter.temp and unitIsPlayer[unit] and isTemp and not isParty then show = true end
+	
+	-- Show/Hide trinket procs
+	if auraDB.trinket and auraDB.trinket[spellID] then show = filter.trinket end
+	-- Show/Hide trinket procs
+	if auraDB.enchant and auraDB.enchant[spellID] then show = filter.enchant end
+	-- Show/Hide class procs
+	if auraDB.class and auraDB.class[playerClass] and auraDB.class[playerClass][spellID] then show = filter.class end
 
-	if override.class[playerClass][spellID] then show = filter.class end
+	if auraDB.never and auraDB.never[spellID] then	show = false end
+	if auraDB.always and auraDB.always[spellID] then show = true end
+	
+	if show then debug("Aura", spellID, name, "/", caster) end	
+	return show
+end
 
-	if override.never[spellID] then show = false end
-	if override.always[spellID] then show = true end
+local function customFilter(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
+	local show = true
+	if ns.config.filter.enable then
+		show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
+	end
 	-- TODO: check player white/blacklist
 	return show
 end
 		
-local filterFuncs = {
-	player = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end,
-	pet = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end,
-	target = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end,
-	targettarget = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss3)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end,	
-	focus = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end,
-	focustarget = function(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
-		local show = true
-		if ns.config.filter.enable then
-			show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer)
-		end
-		if show then debug("Aura", spellID, name) end
-		return show
-	end	
+ns.CustomAuraFilters = {
+	player = customFilter,
+	pet  = customFilter,
+	target  = customFilter,
+	targettarget =  = customFilter,
+	focus =  = customFilter,
+	focustarget =  = customFilter
 }
-
-ns.CustomAuraFilters = filterFuncs

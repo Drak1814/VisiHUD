@@ -58,6 +58,8 @@ ns.configDefault = {
 		player = true,
 		boss = true,
 		class = false,
+		trinket = false,
+		enchant = false,
 		temp = true
 	},
 	
