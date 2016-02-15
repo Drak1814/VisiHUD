@@ -55,12 +55,10 @@ ns.configDefault = {
 	
 	filter = {
 		enable = true,
-		player = true,
 		boss = true,
+		party = false,
 		class = false,
-		trinket = false,
-		enchant = false,
-		temp = true
+		enchant = false
 	},
 	
 	fastFocus = true,

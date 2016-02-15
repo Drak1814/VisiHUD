@@ -13,7 +13,7 @@ local function noop() end
 local debug = ns.debug
 
 ns.frames, ns.headers, ns.objects = {}, {}, {}
-
+	
 local function Spawn(self, unit, isSingle)
 	
 	local config = ns.config
@@ -40,7 +40,7 @@ local function Spawn(self, unit, isSingle)
 	self:RegisterForClicks("AnyUp")
 	
 	-- FastFocus Key
-	if (ns.config.fastfocus) then	
+	if ns.config.fastfocus then
 		self:SetAttribute("shift-type1", "focus")
 	end
 
