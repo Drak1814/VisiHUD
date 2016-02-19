@@ -1,5 +1,5 @@
 ## Interface: 60200
-## Version: 2.0-beta6
+## Version: 2.0-beta8
 ## X-Curse-Project-Name: VisiHUD
 ## X-Curse-Project-ID: visihud
 
@@ -21,6 +21,7 @@
 Libs\libs.xml
 
 Embeds\oUF\oUF.xml
+Embeds\oUF_Smooth.lua
 
 Features\module.xml
 Elements\module.xml

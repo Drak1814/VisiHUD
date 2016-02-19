@@ -39,32 +39,36 @@ ns.configDefault = {
 
 	healthColorMode = "HEALTH",
 	healthColor = { 0.1, 0.9, 0.1 },
-	healthBG = 0.2,					
+	healthBG = 0.2,
 
-	powerColorMode = "CLASS",		
-	powerColor = { 0.9, 0.1, 0.9 }, 
-	powerBG = 0.2,					
-	
-	castColor = { 0.9, 0.9, 0.1 },	
-	castBG = 0.2,					
+	powerColorMode = "CLASS",
+	powerColor = { 0.9, 0.1, 0.9 },
+	powerBG = 0.2,
+
+	castColor = { 0.9, 0.9, 0.1 },
+	castBG = 0.2,
 
 	borderColor = { 0.5, 0.5, 0.5 },
 	borderSize = 12,
 
 	PVP = false, -- enable PVP mode, currently only affects aura filtering
-	
-	filter = {
+
+	filter = { -- smart aura filtering
 		enable = true,
 		boss = true,
-		party = false,
-		class = false,
-		enchant = false
+		party = false
 	},
-	
+
+	filterList = { -- default/custom aura lists
+		class = false,
+		enchant = false,
+	},
+
 	fastFocus = true,
 	expandZoom = true,
+	smooth= true,
 	debug = false
-	
+
 }
 
 -- Default Unit Config
@@ -101,4 +105,3 @@ ns.uconfigDefault = {
 		width = 0.5
 	}
 }
-

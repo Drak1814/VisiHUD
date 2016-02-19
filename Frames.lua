@@ -13,11 +13,11 @@ local function noop() end
 local debug = ns.debug
 
 ns.frames, ns.headers, ns.objects = {}, {}, {}
-	
+
 local function Spawn(self, unit, isSingle)
-	
+
 	local config = ns.config
-	
+
 	if self:GetParent():GetAttribute("useOwnerUnit") then
 		local suffix = self:GetParent():GetAttribute("unitsuffix")
 		self:SetAttribute("useOwnerUnit", true)
@@ -26,7 +26,7 @@ local function Spawn(self, unit, isSingle)
 	end
 
 	debug("Spawning Unit", unit)
-	
+
 	local uconfig = ns.uconfig[unit]
 	self.spawnunit = unit
 
@@ -38,7 +38,7 @@ local function Spawn(self, unit, isSingle)
 	self:HookScript("OnLeave", ns.UnitFrame_OnLeave)
 
 	self:RegisterForClicks("AnyUp")
-	
+
 	-- FastFocus Key
 	if ns.config.fastfocus then
 		self:SetAttribute("shift-type1", "focus")
@@ -63,7 +63,7 @@ local function Spawn(self, unit, isSingle)
 	for k, v in pairs(ns.framePrototype) do
 		self[k] = v
 	end
-	
+
 	-------------------------
 	-- Border and backdrop --
 	-------------------------
@@ -476,7 +476,7 @@ local function Spawn(self, unit, isSingle)
 		otherPower:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 0)
 		otherPower:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 0)
 		otherPower:SetHeight(FRAME_HEIGHT * config.powerHeight / 2)
-		
+
 		otherPower.value:SetPoint("CENTER", otherPower, 0, 1)
 
 		otherPower.value:Hide()
@@ -542,11 +542,11 @@ local function Spawn(self, unit, isSingle)
 		self.RaidIcon:SetPoint("CENTER", self, 0, 0)
 		self.RaidIcon:SetSize(32, 32)
 	end
-	
+
 	---------------
 	-- PvP icons --
 	---------------
-	if unit == "target" then 
+	if unit == "target" then
 		self.PvP = self.overlay:CreateFontString(nil, "OVERLAY")
 		self.PvP:SetPoint("CENTER", self, "TOPLEFT", -1, 4) -- "BOTTOM")
 		self.PvP:SetFont("Fonts\\ARIALN.ttf", 18, "OUTLINE")
@@ -732,7 +732,7 @@ local function Spawn(self, unit, isSingle)
 	------------------------
 	-- Plugin: oUF_Smooth --
 	------------------------
-	if IsAddOnLoaded("oUF_Smooth") and not strmatch(unit, ".target$") then
+	if config.smooth then
 		self.Health.Smooth = true
 		if self.Power then
 			self.Power.Smooth = true
@@ -750,7 +750,7 @@ local function Spawn(self, unit, isSingle)
 	end
 	self.overlay:SetFrameLevel(maxLevel + 1)
 
-	
+
 
 end
 
@@ -759,7 +759,7 @@ end
 function ns.Factory(dUF)
 	local config = ns.config
 	local uconfig = ns.uconfig
-	
+
 	-- DO NOT hide Blizzard frames
 	local DisableBlizzard = dUF.DisableBlizzard
 	function dUF:DisableBlizzard(unit) end
@@ -796,7 +796,7 @@ function ns.Factory(dUF)
 	end
 
 	dUF.DisableBlizzard = DisableBlizzard
-	
+
 	for unit, object in pairs(ns.frames) do
 		local udata = uconfig[unit]
 		local p1, parent, p2, x, y = string.split(" ", udata.point)
@@ -849,4 +849,3 @@ function ns.Factory(dUF)
 	end
 
 end
-

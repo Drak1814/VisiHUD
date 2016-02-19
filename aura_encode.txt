@@ -1,0 +1,18 @@
+Encoding for custom aura lists:
+
+title\n
+spellID,spellID,...|classID,...|specID,.../n
+...
+
+
+Example:
+
+---
+Druid Procs
+5217|11|103
+58180|11|103
+--
+
+Encoded (Ascii85):
+
+<~6umEaA0=]hDe!hq2)6mFHnd@'0ebBj2)m<M0RPT0Hnd<2~>
