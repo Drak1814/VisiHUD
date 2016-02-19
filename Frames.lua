@@ -691,6 +691,7 @@ local function Spawn(self, unit, isSingle)
 	-------------------------------------
 	-- Range || Plugin: oUF_SpellRange --
 	-------------------------------------
+--[=[
 	local ranger
 	if IsAddOnLoaded("oUF_SpellRange") then
 		ranger = "SpellRange"
@@ -700,6 +701,7 @@ local function Spawn(self, unit, isSingle)
 	if ranger then
 		self[ranger] = { insideAlpha = 1, outsideAlpha = 0.5 }
 	end
+]=]
 
 	--------------------------
 	-- Element: Combat text --
