@@ -19,7 +19,7 @@ ns.UpdateAuraFilter = function()
 
 	-- compile the filters & effects
 	for s, t in pairs(ns.auraSet) do
-		if type(t) == 'table' and then
+		if type(t) == 'table' then
 			if ns.config.filter[s] ~= nil then
 				if ns.config.filter[s] and ns.config.filter[s].enabled then
 					local show = ns.config.filter[s].show
