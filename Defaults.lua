@@ -53,7 +53,8 @@ ns.configDefault = {
 
 	PVP = false, -- enable PVP mode, currently only affects aura filtering
 
-	smartfilter = { -- smart aura filtering
+	-- smart aura filtering
+	smartFilter = {
 		enable = true,
 		boss = true,
 		party = false

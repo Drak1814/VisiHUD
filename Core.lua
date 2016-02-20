@@ -225,8 +225,8 @@ function Loader:ADDON_LOADED(event, addon)
 	end
 
 	print(_name .. " " .. ns.toc.version .. " Loaded")
-	print(_name .. ": FastFocus " .. (ns.config.fastfocus and "Enabled" or "Disabled"))
-	print(_name .. ": ExpandedZoom " ..(ns.config.expandzoom and "Enabled" or "Disabled"))
+	print(_name .. ": FastFocus " .. (ns.config.fastFocus and "Enabled" or "Disabled"))
+	print(_name .. ": ExpandZoom " ..(ns.config.expandZoom and "Enabled" or "Disabled"))
 
 end
 
