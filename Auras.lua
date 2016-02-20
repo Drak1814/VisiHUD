@@ -56,16 +56,16 @@ ns.aura = {
 		temp = { -- temporary auras
 		},
 		boss = { -- applied by boss
-			106648 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-			106784 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-			106784 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-			123059 = true, -- Destabilize (Amber-Shaper Un'sok)
+			[106648] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			[106784] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			[106784] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			[123059] = true, -- Destabilize (Amber-Shaper Un'sok)
 		},
 		always = { -- whitelist
 		},
 		never = { -- blacklist
-			116631 = true, -- Colossus
-			104993 = true, -- Jade Spirit
+			[116631] = true, -- Colossus
+			[104993] = true, -- Jade Spirit
 		}
 	}
 }
