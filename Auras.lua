@@ -7,6 +7,8 @@
 
 local _, ns = ...
 
+-- TODO: replace with Aura List Library
+--[=[
 local cID = ns.classID
 local sID = ns.specID
 
@@ -25,6 +27,9 @@ ns.defaultAuras = {
 			{ id = 159233, class = cID.Druid }, -- Ursa Major
 			{ id = 135286, class = cID.Druid }, -- Tooth & Claw
 			{ id = 63058, class = cID.Druid }, -- Glyph of Barkskin
+			-- Restoration
+			{ id = 158478, class = cID.Druid }, -- Soul of the Forest
+			{ id = 16879, class = cID.Druid }, -- Clearcasting
 		}
 	},
 	enchant = {
@@ -40,29 +45,27 @@ ns.defaultAuras = {
 		}
 	},
 }
+]=]
 
-ns.auraOverride = {
-	player = { -- applied by player
-	},
-	party = { -- applied by party
-	},
-	temp = { -- temporary auras
-	},
-	boss = { -- applied by boss
-		{ id = { 106648, 106784 } }, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-		{ id = 106784 }, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-		{ id = 123059 }, -- Destabilize (Amber-Shaper Un'sok)
-	},
-	always = { -- whitelist
-	},
-	never = { -- blacklist
-		116631, -- Colossus
-		118334, -- Dancing Steel (agi)
-		118335, -- Dancing Steel (str)
-		104993, -- Jade Spirit
-		116660, -- River's Song
-		104509, -- Windsong (crit)
-		104423, -- Windsong (haste)
-		104510, -- Windsong (mastery)
+ns.aura = {
+	override = {
+		player = { -- applied by player
+		},
+		party = { -- applied by party
+		},
+		temp = { -- temporary auras
+		},
+		boss = { -- applied by boss
+			106648 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			106784 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			106784 = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
+			123059 = true, -- Destabilize (Amber-Shaper Un'sok)
+		},
+		always = { -- whitelist
+		},
+		never = { -- blacklist
+			116631 = true, -- Colossus
+			104993 = true, -- Jade Spirit
+		}
 	}
 }

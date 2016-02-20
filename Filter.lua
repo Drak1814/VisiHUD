@@ -9,27 +9,33 @@ local _, ns = ...
 local _, _, playerClass = UnitClass("player")
 local debug = ns.debug
 
-local filter = {}
+ns.aura.filter = {}
+ns.aura.effect = {}
 
-ns.UpdateAuraList = function()
+ns.UpdateAuraFilter = function()
 
-	filter = {}
+	ns.aura.filter = {}
+	ns.aura.effect = {}
 
-	local auraList = ns.defaultAuras
-	-- TODO: load user aura lists
-
-	-- compile the filters
-	for c, t in pairs(auraList) do
-		if type(t) == 'table' then
-			if ns.config.filterList[c] ~= nil then
-				local show = ns.config.filterList[c]
-				for _, v in ipairs(t.auras) do
-					if not v.class or v.class == playerClass then
-						if type(v.id) == 'number' then
-							filter[v.id] = show
-						elseif type(v.id) == 'table' then
-							for _, v in ipairs(v.id) do
-								if type(v) == 'number' then filter[v] = show end
+	-- compile the filters & effects
+	for s, t in pairs(ns.auraSet) do
+		if type(t) == 'table' and then
+			if ns.config.filter[s] ~= nil then
+				if ns.config.filter[s] and ns.config.filter[s].enabled then
+					local show = ns.config.filter[s].show
+					local effect = ns.config.filter[s].effect
+					for _, v in ipairs(t.auras) do
+						if not v.class or v.class == playerClass then
+							if type(v.id) == 'number' then
+								ns.aura.filter[v.id] = show
+								ns.aura.effect[v.id] = effect
+							elseif type(v.id) == 'table' then
+								for _, v in ipairs(v.id) do
+									if type(v) == 'number' then
+										ns.aura.filter[v] = show
+										ns.aura.effect[v] = effect
+									end
+								end
 							end
 						end
 					end
@@ -68,10 +74,10 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	]]
 
 	local show = false
-	local isTemp = (duration and duration > 0 and duration <= 30) or ns.auraOverride.temp[spellID]
-	local isBoss = isBoss or unitIsBoss[caster] or ns.auraOverride.boss[spellID]
-	local isPlayer = isPlayer or unitIsPlayer[caster] or ns.auraOverride.player[spellID]
-	local isParty = unitIsParty[caster] or ns.auraOverride.party[spellID]
+	local isTemp = (duration and duration > 0 and duration <= 30) or ns.aura.override.temp[spellID]
+	local isBoss = isBoss or unitIsBoss[caster] or ns.aura.override.boss[spellID]
+	local isPlayer = isPlayer or unitIsPlayer[caster] or ns.aura.override.player[spellID]
+	local isParty = unitIsParty[caster] or ns.aura.override.party[spellID]
 
 	if unitIsParty[unit] then
 		-- temp buffs you applied to yourself
@@ -84,12 +90,12 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	end
 
 	-- show/hide all boss applied debuffs
-	if isBoss and isDebuff then show = ns.config.filter.boss end
+	if isBoss and isDebuff then show = ns.config.smartFilter.boss end
  	-- show/hide temp party buffs on yourself
-	if unitIsPlayer[unit] and isParty and isTemp then show = ns.config.filter.party end
+	if unitIsPlayer[unit] and isParty and isTemp then show = ns.config.smartFilter.party end
 
-	if ns.auraOverride.never and ns.auraOverride.never[spellID] then show = false end
-	if ns.auraOverride.always and ns.auraOverride.always[spellID] then show = true end
+	if ns.aura.override.never and ns.aura.override.never[spellID] then show = false end
+	if ns.aura.override.always and ns.aura.override.always[spellID] then show = true end
 
 	if show then debug("Aura", spellID, name, "/", caster) end
 
@@ -99,11 +105,11 @@ end
 
 local function customFilter(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
 	local show = true
-	if ns.config.filter.enable then
+	if ns.config.smartFilter.enable then
 		show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer, icon.isDebuff)
 	end
-	-- check filter list
-	if filter[spellID] ~= nil then show = filter[spellID] end
+	-- apply current compiled aura filter
+	if ns.aura.filter[spellID] ~= nil then show = ns.aura.filter[spellID] end
 	return show
 end
 

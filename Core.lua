@@ -16,7 +16,7 @@ ns.toc = {
 	style = GetAddOnMetadata(_name, 'X-oUF-Style'),
 }
 
--- debugging 
+-- debugging
 
 ns.debug = function (...)
 	if ns.config.debug then ChatFrame3:AddMessage(strjoin(" ", "|cffff7f4f" .. _name .. ":|r", tostringall(...))) end
@@ -100,23 +100,17 @@ function Loader:ADDON_LOADED(event, addon)
 	VisiHUDUnitConfig = initDB(VisiHUDUnitConfig, ns.uconfigDefault)
 	ns.uconfig = VisiHUDUnitConfig
 
-	-- Aura settings stored per character:
-	local AURA_CONFIG_VERSION = 3
-	VisiHUDAuraConfig = initDB(VisiHUDAuraConfig, {
-		customFilters = {},
-		deleted = {},
-	})
-	
+	-- Aura Sets:
+	VisiHUDAuraSets = initDB(VisiHUDAuraSets, {})
+	ns.auraSet = VisiHUDAuraSets
+
+	-- Aura Set config stored per character:
+	VisiHUDAuraConfig = initDB(VisiHUDAuraConfig, {})
+	ns.config.filter = VisiHUDAuraConfig
+
+	ns.UpdateAuraFilter()
+
 	debug("ADDON_LOADED")
-	
-	-- Remove default values
-	for id, flag in pairs(VisiHUDAuraConfig.customFilters) do
-		if flag == ns.defaultAuras[id] then
-			VisiHUDAuraConfig.customFilters[id] = nil
-		end
-	end
-	VisiHUDAuraConfig.VERSION = AURA_CONFIG_VERSION
-	ns.UpdateAuraList()
 
 	-- SharedMedia
 	Media = LibStub("LibSharedMedia-3.0", true)
@@ -144,7 +138,7 @@ function Loader:ADDON_LOADED(event, addon)
 			end
 		end)
 	end
-	
+
 	-- FastFocus Key
 	if (ns.config.fastFocus) then
 		debug("Enabling FastFocus")
@@ -160,7 +154,7 @@ function Loader:ADDON_LOADED(event, addon)
 		foc:SetAttribute("macrotext", "/focus mouseover")
 		SetOverrideBindingClick(FastFocuser, true, "SHIFT-BUTTON1", "FastFocuser")
 	end
-	
+
 	-- Cleanup
 	self:UnregisterEvent(event)
 	self.ADDON_LOADED = nil
@@ -169,13 +163,13 @@ function Loader:ADDON_LOADED(event, addon)
 	-- Go
 	dUF:RegisterInitCallback(ns.restorePosition)
 	dUF:Factory(ns.Factory)
-	
+
 	-- Startup events
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	-- Combat events
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	
+
 	-- Sounds for target/focus changing and PVP flagging
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED")
@@ -229,11 +223,11 @@ function Loader:ADDON_LOADED(event, addon)
 			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
 		end
 	end
-	
+
 	print(_name .. " " .. ns.toc.version .. " Loaded")
 	print(_name .. ": FastFocus " .. (ns.config.fastfocus and "Enabled" or "Disabled"))
 	print(_name .. ": ExpandedZoom " ..(ns.config.expandzoom and "Enabled" or "Disabled"))
-			
+
 end
 
 ------------------------------------------------------------------------
@@ -247,7 +241,7 @@ function Loader:PLAYER_ENTERING_WORLD(event)
 		ConsoleExec("CameraDistanceSmoothSpeed 40")
 	end
 end
-	
+
 function Loader:PLAYER_LOGOUT(event)
 	--debug(event)
 	local function cleanDB(db, defaults)
@@ -283,7 +277,7 @@ function Loader:PLAYER_REGEN_DISABLED(event)
 		ns.anchor = nil
 	end
 end
-	
+
 function Loader:PLAYER_FOCUS_CHANGED(event)
 	debug(event)
 	if UnitExists("focus") then
@@ -335,9 +329,9 @@ end
 
 function Loader:MODIFIER_STATE_CHANGED(event, key, state)
 	debug(event)
-	if 	
+	if
 		( IsControlKeyDown() and (key == 'LALT' or key == 'RALT')) or
-		( IsAltKeyDown() and (key == 'LCTRL' or key == 'RCTRL')) 
+		( IsAltKeyDown() and (key == 'LCTRL' or key == 'RCTRL'))
 	then
 		local a, b
 		if state == 1 then
@@ -395,7 +389,7 @@ local FALLBACK_FONT_SIZE = 16 -- some Blizzard bug
 
 function ns.CreateFontString(parent, size, justify)
 	--debug("CreateFontString", parent:GetName(), size, justify)
-	
+
 	local file = Media:Fetch("font", ns.config.font) or STANDARD_TEXT_FONT
 	if not size or size == 0 then size = FALLBACK_FONT_SIZE end
 	size = size * ns.config.fontScale
@@ -511,5 +505,3 @@ function ns.SetAllStatusBarTextures()
 		bar.bg:SetVertexColor(r, g, b, a)
 	end
 end
-
-

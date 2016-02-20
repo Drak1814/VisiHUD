@@ -1,5 +1,5 @@
 ## Interface: 60200
-## Version: 2.0-beta8
+## Version: 2.0-beta9
 ## X-Curse-Project-Name: VisiHUD
 ## X-Curse-Project-ID: visihud
 
@@ -15,7 +15,7 @@
 ## X-oUF-Style: Drak
 
 ## OptionalDependencies: LibResInfo-1.0, LibSharedMedia-3.0
-## SavedVariables: VisiHUDConfig, VisiHUDUnitConfig
+## SavedVariables: VisiHUDConfig, VisiHUDUnitConfig, VisiHUDAuraSets
 ## SavedVariablesPerCharacter: VisiHUDAuraConfig
 
 Libs\libs.xml
