@@ -126,6 +126,7 @@ end
 
 local function customFilter(self, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBoss)
 	local show = true
+	local caster = caster or 'unknown'
 	if ns.config.smartFilter.enable then
 		show = smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, icon.isPlayer, icon.isDebuff)
 	end
