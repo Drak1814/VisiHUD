@@ -81,7 +81,7 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	local isPlayer = isPlayer or unitIsPlayer[caster] or ns.aura.override.player[spellID]
 	local isParty = unitIsParty[caster] or ns.aura.override.party[spellID]
 
-	if unitIsParty[unit] then
+	if unitIsPlayer[unit] then
 		-- temp buffs you applied to yourself
 		if isTemp and not isDebuff and isPlayer then show = true end
 		-- temp debuffs applied to you
