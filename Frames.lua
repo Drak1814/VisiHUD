@@ -560,26 +560,53 @@ local function Spawn(self, unit, isSingle)
 	----------------
 	if unit == "player" then
 		local GAP = 6
+		local SIZE = FRAME_HEIGHT
+		local MAX_ICONS = floor((FRAME_WIDTH + GAP) / (SIZE + GAP))
+		local NUM_BUFFS = MAX_ICONS - 2
+		local NUM_DEBUFFS = 2
+		local HEIGHT = (SIZE * 3) + (GAP * 4)
 
 		self.Buffs = CreateFrame("Frame", nil, self)
-		self.Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+		self.Buffs:SetHeight(HEIGHT)
 		self.Buffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 24)
-		self.Buffs:SetHeight(FRAME_HEIGHT)
+		self.Buffs:SetWidth((SIZE * NUM_BUFFS) + (GAP * (NUM_BUFFS - 1)))
 
 		self.Buffs["growth-x"] = "LEFT"
 		self.Buffs["growth-y"] = "UP"
-		self.Buffs["initialAnchor"] = "BOTTOMRIGHT"
-		self.Buffs["num"] = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
-		self.Buffs["size"] = FRAME_HEIGHT
+		self.Buffs.showType = false
+		self.Buffs.size = SIZE
 		self.Buffs["spacing-x"] = GAP
-		self.Buffs["spacing-y"] = GAP
+		self.Buffs["spacing-y"] = GAP * 2
+		self.Buffs.initialAnchor = "BOTTOMRIGHT"
+		self.Buffs.num = NUM_BUFFS * 3
 
-		self.Buffs.CustomFilter   = ns.CustomAuraFilters.player
+		self.Buffs.CustomFilter   = ns.CustomAuraFilters.target
 		self.Buffs.PostCreateIcon = ns.Auras_PostCreateIcon
 		self.Buffs.PostUpdateIcon = ns.Auras_PostUpdateIcon
 		self.Buffs.PostUpdate     = ns.Auras_PostUpdate -- required to detect Dead => Ghost
 
 		self.Buffs.parent = self
+
+		self.Debuffs = CreateFrame("Frame", nil, self)
+		self.Debuffs:SetHeight(HEIGHT)
+		self.Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+		self.Debuffs:SetWidth((SIZE * NUM_DEBUFFS) + (GAP * (NUM_DEBUFFS - 1)))
+
+		self.Debuffs["growth-x"] = "RIGHT"
+		self.Debuffs["growth-y"] = "UP"
+		self.Debuffs.showType = true
+		self.Debuffs.size = SIZE
+		self.Debuffs["spacing-x"] = GAP
+		self.Debuffs["spacing-y"] = GAP * 2
+		self.Debuffs.initialAnchor = "BOTTOMLEFT"
+		self.Debuffs.num = NUM_DEBUFFS * 3
+
+		self.Debuffs.CustomFilter   = ns.CustomAuraFilters.target
+		self.Debuffs.PostCreateIcon = ns.Auras_PostCreateIcon
+		self.Debuffs.PostUpdateIcon = ns.Auras_PostUpdateIcon
+
+		self.Debuffs.parent = self
+
 	elseif unit == "pet" then
 		local GAP = 6
 
@@ -603,19 +630,19 @@ local function Spawn(self, unit, isSingle)
 		self.Buffs.parent = self
 	elseif unit == "target" then
 		local GAP = 6
-
-		local MAX_ICONS = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
-		local NUM_BUFFS = 2
-		local NUM_DEBUFFS = MAX_ICONS - 2
-		local ROW_HEIGHT = (FRAME_HEIGHT * 2) + (GAP * 2)
+		local SIZE = FRAME_HEIGHT
+		local MAX_ICONS = floor((FRAME_WIDTH + GAP) / (SIZE + GAP))
+		local NUM_BUFFS = MAX_ICONS - 2
+		local NUM_DEBUFFS = 2
+		local HEIGHT = (SIZE * 3) + (GAP * 4)
 
 		self.Debuffs = CreateFrame("Frame", nil, self)
-		self.Debuffs:SetHeight(ROW_HEIGHT)
+		self.Debuffs:SetHeight(HEIGHT)
 		self.Debuffs.parent = self
 
 		self.Debuffs["growth-y"] = "UP"
 		self.Debuffs["showType"] = true
-		self.Debuffs["size"] = FRAME_HEIGHT
+		self.Debuffs["size"] = SIZE
 		self.Debuffs["spacing-x"] = GAP
 		self.Debuffs["spacing-y"] = GAP * 2
 
@@ -625,12 +652,12 @@ local function Spawn(self, unit, isSingle)
 		self.Debuffs.PostUpdate     = ns.Auras_PostUpdate -- required to detect Dead => Ghost
 
 		self.Buffs = CreateFrame("Frame", nil, self)
-		self.Buffs:SetHeight(ROW_HEIGHT)
+		self.Buffs:SetHeight(HEIGHT)
 		self.Buffs.parent = self
 
 		self.Buffs["growth-y"] = "UP"
 		self.Buffs["showType"] = false
-		self.Buffs["size"] = FRAME_HEIGHT
+		self.Buffs["size"] = SIZE
 		self.Buffs["spacing-x"] = GAP
 		self.Buffs["spacing-y"] = GAP * 2
 
@@ -650,17 +677,17 @@ local function Spawn(self, unit, isSingle)
 
 			a:ClearAllPoints()
 			a:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 24)
-			a:SetWidth((FRAME_HEIGHT * NUM_DEBUFFS) + (GAP * (NUM_DEBUFFS - 1)))
+			a:SetWidth((SIZE * NUM_DEBUFFS) + (GAP * (NUM_DEBUFFS - 1)))
 			a["growth-x"] = "RIGHT"
 			a["initialAnchor"] = "BOTTOMLEFT"
-			a["num"] = NUM_DEBUFFS
+			a["num"] = NUM_DEBUFFS * 3
 
 			b:ClearAllPoints()
 			b:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 2, 24)
-			b:SetWidth((FRAME_HEIGHT * NUM_BUFFS) + (GAP * (NUM_BUFFS - 1)))
+			b:SetWidth((SIZE * NUM_BUFFS) + (GAP * (NUM_BUFFS - 1)))
 			b["growth-x"] = "LEFT"
 			b["initialAnchor"] = "BOTTOMRIGHT"
-			b["num"] = NUM_BUFFS
+			b["num"] = NUM_BUFFS * 3
 
 			if not initial then
 				a:ForceUpdate()
