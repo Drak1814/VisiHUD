@@ -16,6 +16,8 @@ ns.toc = {
 	style = GetAddOnMetadata(_name, 'X-oUF-Style'),
 }
 
+ns.pname = "|cff00ddba" .. _name .. ":|r"
+
 -- debugging
 
 ns.debug = function (...)
@@ -26,7 +28,7 @@ local debug = ns.debug
 
 -- dependency check
 
-assert(dUF, _name .. " was unable to locate dUF install.")
+assert(dUF, ns.pname .. " was unable to locate dUF install.")
 
 ns.fontstrings = {}
 ns.statusbars = {}
@@ -194,39 +196,62 @@ function Loader:ADDON_LOADED(event, addon)
 
 	SLASH_VisiHUD1 = "/visihud"
 	function SlashCmdList.VisiHUD(cmd)
+		local arg = {}
+		for v in string.gmatch(cmd, "[^ ]+") do
+			tinsert(arg, v)
+		end
 		cmd = strlower(cmd)
-		debug("SlashCmdList", cmd)
+		debug("SlashCmd", cmd)
 		if cmd == "buffs" or cmd == "debuffs" then
-			local tmp = {}
+			local t = {}
 			local func = cmd == "buffs" and UnitBuff or UnitDebuff
 			for i = 1, 40 do
 				local name, _, _, _, _, _, _, _, _, _, id = func("target", i)
 				if not name then break end
-				tinsert(tmp, format("%s [%d]", name, id))
+				tinsert(t, format("%d %s", id, name))
 			end
-			if #tmp > 0 then
-				sort(tmp)
-				DEFAULT_CHAT_FRAME:AddMessage(format("|cff00ddba" .. _name .. ":|r Your current target has %d %s:", #tmp, cmd))
-				for i = 1, #tmp do
-					DEFAULT_CHAT_FRAME:AddMessage("   ", tmp[i])
+			if #t > 0 then
+				sort(t)
+				print(ns.pname, format("Your current target has %d %s:", #t, cmd))
+				for _, s in ipairs(t) do
+					print("   ", s)
 				end
 			else
-				DEFAULT_CHAT_FRAME:AddMessage(format("|cff00ddba" .. _name .. ":|r Your current target does not have any %s.", cmd))
+				print(ns.pname, format("Your current target does not have any %s.", cmd))
 			end
-		elseif cmd == "debug" then
-			VisiHUDConfig.debug = not VisiHUDConfig.debug
-			print(_name .. ": Debugging " .. (VisiHUDConfig.debug and "Enable" or "Disabled"))
 		elseif cmd == "move" then
 			ns.ToggleMovers()
+		elseif cmd == "" then
+			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
+			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
 		else
-			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
-			InterfaceOptionsFrame_OpenToCategory("VisiHUD")
+			if arg[1] then
+				local k = arg[1]
+				if type(ns.config[k]) == 'boolean' then
+					ns.config[k] = not ns.config[k]
+					VisiHUDConfig[k] = ns.config[k]
+					print(ns.pname, cmd, ns.config[k] and "Enabled" or "Disabled")
+				elseif type(ns.config[k]) == 'table' then
+					if not arg[2] and type(ns.config[k].enable) == 'boolean' then
+						ns.config[k].enable = not ns.config[k].enable
+						VisiHUDConfig[k].enable = ns.config[k].enable
+						print(ns.pname, cmd, ns.config[k].enable and "Enabled" or "Disabled")
+					elseif arg[2] then
+						local c, k = k, arg[2]
+						if type(ns.config[c][k]) == 'boolean' then
+							ns.config[c][k] = not ns.config[c][k]
+							VisiHUDConfig[c][k] = ns.config[c][k]
+							print(ns.pname, cmd, ns.config[c][k] and "Enabled" or "Disabled")
+						end
+					end
+				end
+			end
 		end
 	end
 
-	print(_name .. " " .. ns.toc.version .. " Loaded")
-	print(_name .. ": FastFocus " .. (ns.config.fastFocus and "Enabled" or "Disabled"))
-	print(_name .. ": ExpandZoom " ..(ns.config.expandZoom and "Enabled" or "Disabled"))
+	print(ns.pname, ns.toc.version, "Loaded")
+	print(ns.pname, "FastFocus", (ns.config.fastFocus and "Enabled" or "Disabled"))
+	print(ns.pname, "ExpandZoom", (ns.config.expandZoom and "Enabled" or "Disabled"))
 
 end
 

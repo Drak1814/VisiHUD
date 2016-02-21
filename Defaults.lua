@@ -62,7 +62,7 @@ ns.configDefault = {
 
 	fastFocus = true,
 	expandZoom = true,
-	smooth= true,
+	smooth = true,
 	debug = false
 
 }

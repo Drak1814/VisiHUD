@@ -66,6 +66,8 @@ local unitIsParty = { party1 = true, party2 = true, party3 = true, party4 = true
 	raid31 = true, raid32 = true, raid33 = true, raid34 = true, raid35 = true, raid36 = true, raid37 = true, raid38 = true, raid39 = true, raid40 = true }
 local unitIsBoss = { boss1 = true, boss2 = true, boss3 = true, boss4 = true }
 
+local tracker = {}
+
 local function smartFilter(unit, caster, name, spellID, count, duration, expirationTime, isBoss, isPlayer, isDebuff)
 	--[[
 	debug("smartFilter", "[unit]", unit, "[caster]", caster, "[name]", name, "[id]", spellID,
@@ -97,7 +99,26 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	if ns.aura.override.never and ns.aura.override.never[spellID] then show = false end
 	if ns.aura.override.always and ns.aura.override.always[spellID] then show = true end
 
-	if show then debug("Aura", spellID, name, "/", caster) end
+	if ns.config.debug then
+		if not tracker[spellID] then
+			debug("Aura",
+				format("(%s) %d %s (%s)", unit, spellID, name, caster),
+				table.concat({
+					isDebuff and 'D' or '-',
+					isTemp and 'T' or '-',
+					isBoss and 'B' or '-',
+					isPlayer and 'P' or '-',
+					isParty and 'Y' or '-'
+				}),
+				(show and 'SHOW' or 'HIDE')
+			)
+			tracker[spellID] = time() + 10
+		else
+			if time() > tracker[spellID] then
+				tracker[spellID] = nil
+			end
+		end
+	end
 
 	return show
 
