@@ -353,7 +353,7 @@ end
 -- Show all auras
 
 function Loader:MODIFIER_STATE_CHANGED(event, key, state)
-	debug(event)
+	--debug(event)
 	if
 		( IsControlKeyDown() and (key == 'LALT' or key == 'RALT')) or
 		( IsAltKeyDown() and (key == 'LCTRL' or key == 'RCTRL'))
