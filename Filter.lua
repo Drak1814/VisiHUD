@@ -76,7 +76,7 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	]]
 
 	local show = false
-	local isTemp = (duration and duration > 0 and duration <= 30) or ns.aura.override.temp[spellID]
+	local isTemp = (duration and duration > 0 and duration <= 60) or ns.aura.override.temp[spellID]
 	local isBoss = isBoss or unitIsBoss[caster] or ns.aura.override.boss[spellID]
 	local isPlayer = isPlayer or unitIsPlayer[caster] or ns.aura.override.player[spellID]
 	local isParty = unitIsParty[caster] or ns.aura.override.party[spellID]
