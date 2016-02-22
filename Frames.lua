@@ -676,14 +676,14 @@ local function Spawn(self, unit, isSingle)
 			end
 
 			a:ClearAllPoints()
-			a:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 24)
+			a:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
 			a:SetWidth((SIZE * NUM_DEBUFFS) + (GAP * (NUM_DEBUFFS - 1)))
 			a["growth-x"] = "RIGHT"
 			a["initialAnchor"] = "BOTTOMLEFT"
 			a["num"] = NUM_DEBUFFS * 3
 
 			b:ClearAllPoints()
-			b:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 2, 24)
+			b:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 24)
 			b:SetWidth((SIZE * NUM_BUFFS) + (GAP * (NUM_BUFFS - 1)))
 			b["growth-x"] = "LEFT"
 			b["initialAnchor"] = "BOTTOMRIGHT"
@@ -697,6 +697,27 @@ local function Spawn(self, unit, isSingle)
 
 		self:RegisterForRoleChange(UpdateAurasForRole)
 		UpdateAurasForRole(self, ns.GetPlayerRole(), true) -- default is DAMAGER
+	elseif unit == "targettarget" then
+		local GAP = 6
+
+		self.Debuffs = CreateFrame("Frame", nil, self)
+		self.Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+		self.Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 24)
+		self.Debuffs:SetHeight(FRAME_HEIGHT)
+
+		self.Debuffs["growth-x"] = "RIGHT"
+		self.Debuffs["growth-y"] = "UP"
+		self.Debuffs["initialAnchor"] = "BOTTOMLEFT"
+		self.Debuffs["num"] = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
+		self.Debuffs["size"] = FRAME_HEIGHT
+		self.Debuffs["spacing-x"] = GAP
+		self.Debuffs["spacing-y"] = GAP
+
+		self.Debuffs.CustomFilter   = ns.CustomAuraFilters.pet
+		self.Debuffs.PostCreateIcon = ns.Auras_PostCreateIcon
+		self.Debuffs.PostUpdateIcon = ns.Auras_PostUpdateIcon
+
+		self.Debuffs.parent = self
 	end
 
 	------------------------------
