@@ -559,6 +559,7 @@ local function Spawn(self, unit, isSingle)
 	-- Aura icons --
 	----------------
 	if unit == "player" then
+		debug("Creating", unit, "Auras")
 		local GAP = 6
 		local SIZE = FRAME_HEIGHT
 		local MAX_ICONS = floor((FRAME_WIDTH + GAP) / (SIZE + GAP))
@@ -608,6 +609,7 @@ local function Spawn(self, unit, isSingle)
 		self.Debuffs.parent = self
 
 	elseif unit == "pet" then
+		debug("Creating", unit, "Auras")
 		local GAP = 6
 
 		self.Buffs = CreateFrame("Frame", nil, self)
@@ -629,6 +631,7 @@ local function Spawn(self, unit, isSingle)
 
 		self.Buffs.parent = self
 	elseif unit == "target" then
+		debug("Creating", unit, "Auras")
 		local GAP = 6
 		local SIZE = FRAME_HEIGHT
 		local MAX_ICONS = floor((FRAME_WIDTH + GAP) / (SIZE + GAP))
@@ -698,26 +701,38 @@ local function Spawn(self, unit, isSingle)
 		self:RegisterForRoleChange(UpdateAurasForRole)
 		UpdateAurasForRole(self, ns.GetPlayerRole(), true) -- default is DAMAGER
 	elseif unit == "targettarget" then
+		debug("Creating", unit, "Auras")
+
 		local GAP = 6
 
-		self.Debuffs = CreateFrame("Frame", nil, self)
-		self.Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
-		self.Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 24)
-		self.Debuffs:SetHeight(FRAME_HEIGHT)
+		local auras = CreateFrame("Frame", nil, self)
+		auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+		auras:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 24)
+		auras:SetHeight(FRAME_HEIGHT)
+		auras.parent = self
 
-		self.Debuffs["growth-x"] = "RIGHT"
-		self.Debuffs["growth-y"] = "UP"
-		self.Debuffs["initialAnchor"] = "BOTTOMLEFT"
-		self.Debuffs["num"] = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
-		self.Debuffs["size"] = FRAME_HEIGHT
-		self.Debuffs["spacing-x"] = GAP
-		self.Debuffs["spacing-y"] = GAP
+		auras["growth-x"] = "RIGHT"
+		auras["growth-y"] = "UP"
+		auras["initialAnchor"] = "BOTTOMLEFT"
+		auras["num"] = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
+		auras["size"] = FRAME_HEIGHT
+		auras["spacing-x"] = GAP
+		auras["spacing-y"] = GAP
 
-		self.Debuffs.CustomFilter   = ns.CustomAuraFilters.pet
-		self.Debuffs.PostCreateIcon = ns.Auras_PostCreateIcon
-		self.Debuffs.PostUpdateIcon = ns.Auras_PostUpdateIcon
+		auras.CustomFilter   = ns.CustomAuraFilters.targettarget
+		auras.PostCreateIcon = ns.Auras_PostCreateIcon
+		auras.PostUpdateIcon = ns.Auras_PostUpdateIcon
 
-		self.Debuffs.parent = self
+		auras:SetScript("OnUpdate", function(self, elapsed)
+			self.sinceLastUpdate = (self.sinceLastUpdate or 0) + elapsed;
+			if self.sinceLastUpdate >= 1.0 then -- in seconds
+				self:ForceUpdate()
+				self.sinceLastUpdate = 0.0;
+			end
+		end)
+
+		self.Auras = auras
+
 	end
 
 	------------------------------
