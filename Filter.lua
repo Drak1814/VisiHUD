@@ -80,6 +80,12 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 	local isBoss = isBoss or unitIsBoss[caster] or ns.aura.override.boss[spellID]
 	local isPlayer = isPlayer or unitIsPlayer[caster] or ns.aura.override.player[spellID]
 	local isParty = unitIsParty[caster] or ns.aura.override.party[spellID]
+	local unitname = GetUnitName(unit, true)
+
+	-- never show if you are the targettarget
+	if unit == "targettarget" and unitname == ns.playername then return false end
+	-- never show "Glyph of" Buffs
+	if name and string.find(name, "^Glyph of ") then return false end
 
 	if unitIsPlayer[unit] or unit == 'targettarget' then
 		-- temp buffs you applied
@@ -93,14 +99,15 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 
 	-- show/hide all boss applied debuffs
 	if isBoss and isDebuff then show = ns.config.smartFilter.boss end
- 	-- show/hide temp party buffs on yourself
-	if unitIsPlayer[unit] and isParty and isTemp then show = ns.config.smartFilter.party end
+	-- show/hide temp party buffs on yourself
+	if unitIsPlayer[unit] and not isDebuff and isParty and isTemp then show = ns.config.smartFilter.party end
 
 	if ns.aura.override.never and ns.aura.override.never[spellID] then show = false end
 	if ns.aura.override.always and ns.aura.override.always[spellID] then show = true end
 
 	if ns.config.debug then
-		if not tracker[spellID] then
+		if not tracker[unit] then tracker[unit] = {} end
+		if not tracker[unit][spellID] then
 			debug("Aura",
 				format("(%s) %d %s (%s)", unit, spellID, name, caster),
 				table.concat({
@@ -112,10 +119,10 @@ local function smartFilter(unit, caster, name, spellID, count, duration, expirat
 				}),
 				(show and 'SHOW' or 'HIDE')
 			)
-			tracker[spellID] = time() + 10
+			tracker[unit][spellID] = time() + 10
 		else
-			if time() > tracker[spellID] then
-				tracker[spellID] = nil
+			if time() > tracker[unit][spellID] then
+				tracker[unit][spellID] = nil
 			end
 		end
 	end

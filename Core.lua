@@ -32,6 +32,7 @@ assert(dUF, ns.pname .. " was unable to locate dUF install.")
 
 ns.fontstrings = {}
 ns.statusbars = {}
+ns.playername = ""
 
 ------------------------------------------------------------------------
 --	Colors
@@ -113,6 +114,8 @@ function Loader:ADDON_LOADED(event, addon)
 	ns.UpdateAuraFilter()
 
 	debug("ADDON_LOADED")
+
+	ns.playername = GetUnitName("player", true)
 
 	-- SharedMedia
 	Media = LibStub("LibSharedMedia-3.0", true)
