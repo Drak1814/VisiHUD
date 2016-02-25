@@ -56,10 +56,15 @@ ns.aura = {
 		temp = { -- temporary auras
 		},
 		boss = { -- applied by boss
+
 			[106648] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
 			[106784] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
-			[106784] = true, -- Brew Explosion (Ook Ook in Stormsnout Brewery)
 			[123059] = true, -- Destabilize (Amber-Shaper Un'sok)
+			[184449] = true, -- Mark of the Necromancer
+			[184450] = true, -- Mark of the Necromancer
+			[184676] = true, -- Mark of the Necromancer
+			[185065] = true, -- Mark of the Necromancer
+			[185066] = true, -- Mark of the Necromancer
 		},
 		always = { -- whitelist
 		},
