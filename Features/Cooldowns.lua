@@ -82,7 +82,7 @@ function AddPlayerSpellCooldown()
 	-- check for spells on cooldown
 	for i = 1, MAX_SPELLS do
 		local start, duration, enable = GetSpellCooldown(i, BOOKTYPE_SPELL)
-		if start and start > 0 and duration > 3 then
+		if start and start > 0 and duration > 3 and enable then
 			local timeLeft = (start + duration) - GetTime()
 			local name, _, texture, _, _, _, id = GetSpellInfo(i, BOOKTYPE_SPELL)
 			if not FindPlayerCooldown(id, false) then
@@ -98,7 +98,7 @@ function AddPlayerItemCooldown()
 	-- check for items on cooldown
 	for i = INVSLOT_FIRST_EQUIPPED, INVSLOT_LAST_EQUIPPED do
 		local start, duration, enable = GetInventoryItemCooldown('player', i)
-		if start and start > 0 and duration > 3 then
+		if start and start > 0 and duration > 3 and enable then
 			local timeLeft = (start + duration) - GetTime()
 			local id = GetInventoryItemID('player', i)
 			if not FindPlayerCooldown(id, true) then
