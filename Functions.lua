@@ -525,13 +525,13 @@ end
 
 function ns.Auras_PostUpdateIcon(element, unit, button, index, offset)
 	local name, _, texture, count, type, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, button.filter)
-
+	--[=[
 	if playerUnits[caster] then
 		button.icon:SetDesaturated(false)
 	else
 		button.icon:SetDesaturated(true)
 	end
-
+	]=]
 	if not button.timer then
 		button.timer = FindAuraTimer(button, unit)
 	end
