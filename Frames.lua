@@ -742,6 +742,41 @@ local function Spawn(self, unit, isSingle)
 		self.Castbar = ns.AddCastbar(self, unit, config.castBG)
 	end
 
+
+	--------------------
+	-- Cooldown icons --
+	--------------------
+
+	if unit == "player" then
+		debug("Creating", unit, "Cooldowns")
+
+		local GAP = 6
+
+		local cd = CreateFrame("Frame", nil, self)
+		if uconfig.castbar then
+			cd:SetPoint("TOPLEFT", self.Castbar, "BOTTOMLEFT", 0, -12)
+			cd:SetPoint("TOPRIGHT", self.Castbar, "BOTTOMRIGHT", 0, -12)
+		else
+			cd:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -12)
+			cd:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -12)
+		end
+
+		cd:SetHeight(FRAME_HEIGHT)
+		cd.parent = self
+
+		cd["growth-x"] = "LEFT"
+		cd["growth-y"] = "DOWN"
+		cd["initialAnchor"] = "TOPRIGHT"
+		cd["num"] = floor((FRAME_WIDTH + GAP) / (FRAME_HEIGHT + GAP))
+		cd["size"] = FRAME_HEIGHT
+		cd["spacing-x"] = GAP
+		cd["spacing-y"] = GAP
+
+		cd.PostCreateIcon = ns.CD_PostCreateIcon
+
+		self.Cooldowns = cd
+	end
+
 	------------
 	-- Threat --
 	------------

@@ -80,3 +80,7 @@ ns.specID = {
 	   Protection = 73
 	}
 }
+
+ns.spellID = {
+	GCD = 61304
+}

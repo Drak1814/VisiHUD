@@ -542,6 +542,32 @@ function ns.Auras_PostUpdate(self, unit)
 end
 
 ------------------------------------------------------------------------
+--	Cooldowns
+------------------------------------------------------------------------
+
+local function CDIconCD_OnShow(cd)
+	local button = cd:GetParent()
+	button:SetBorderParent(cd)
+end
+
+local function CDIconCD_OnHide(cd)
+	local button = cd:GetParent()
+	button:SetBorderParent(button)
+end
+
+function ns.CD_PostCreateIcon(element, button)
+	ns.CreateBorder(button, 12)
+
+	--button.cd:SetReverse(true)
+	button.cd:SetScript("OnHide", CDIconCD_OnHide)
+	button.cd:SetScript("OnShow", CDIconCD_OnShow)
+	if button.cd:IsShown() then CDIconCD_OnShow(button.cd) end
+
+	button.icon:SetTexCoord(0.03, 0.97, 0.03, 0.97)
+
+end
+
+------------------------------------------------------------------------
 --	Threat
 ------------------------------------------------------------------------
 
