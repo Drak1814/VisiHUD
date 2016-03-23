@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='IDs.lua' />
+	<Script file='Library.lua' />
 	<Script file='Defaults.lua' />
 	<Script file='Core.lua'/>
 	<Script file='Movers.lua' />
