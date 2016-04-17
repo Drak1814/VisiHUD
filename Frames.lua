@@ -28,6 +28,14 @@ local function Spawn(self, unit, isSingle)
 	debug("Spawning Unit", unit)
 
 	local uconfig = ns.uconfig[unit]
+
+	local playeronly = false
+	if unit == 'draknalar' then
+		uconfig = ns.uconfig['playeridle']
+		unit = 'player'
+		playeronly = true
+	end
+
 	self.spawnunit = unit
 
 	tinsert(ns.objects, self)
@@ -40,7 +48,7 @@ local function Spawn(self, unit, isSingle)
 	self:RegisterForClicks("AnyUp")
 
 	-- FastFocus Key
-	if ns.config.fastfocus then
+	if ns.config.fastFocus then
 		self:SetAttribute("shift-type1", "focus")
 	end
 
@@ -558,7 +566,7 @@ local function Spawn(self, unit, isSingle)
 	----------------
 	-- Aura icons --
 	----------------
-	if unit == "player" then
+	if unit == "player" and not playeronly then
 		debug("Creating", unit, "Auras")
 		local GAP = 6
 		local SIZE = FRAME_HEIGHT
@@ -747,7 +755,7 @@ local function Spawn(self, unit, isSingle)
 	-- Cooldown icons --
 	--------------------
 
-	if unit == "player" then
+	if unit == "player" and not playeronly then
 		debug("Creating", unit, "Cooldowns")
 
 		local GAP = 6
@@ -886,9 +894,16 @@ function ns.Factory(dUF)
 						"dUF-initialConfigFunction", format(initialConfigFunction, w, h, w, h),
 						unpack(udata.attributes))
 				else
-					--debug("Creating Frame", name)
+					debug("Creating Frame", name)
+					if unit == 'playeridle' then unit = 'draknalar' end
 					local frame = dUF:Spawn(unit, name)
-					frame:SetParent(VisiHUD_CombatShowFrame)
+					if unit == 'draknalar' then
+						debug("Reparenting to IdleViewFrame...")
+						frame:SetParent(VisiHUD_IdleViewFrame)
+					else
+						debug("Reparenting to FullViewFrame...")
+						frame:SetParent(VisiHUD_FullViewFrame)
+					end
 					ns.frames[unit] = frame
 				end
 			end
@@ -899,6 +914,7 @@ function ns.Factory(dUF)
 
 	for unit, object in pairs(ns.frames) do
 		local udata = uconfig[unit]
+		if unit == 'draknalar' then udata = uconfig['playeridle'] end
 		local p1, parent, p2, x, y = string.split(" ", udata.point)
 		object:ClearAllPoints()
 		object:SetPoint(p1, ns.headers[parent] or ns.frames[parent] or _G[parent] or UIParent, p2, tonumber(x) or 0, tonumber(y) or 0)

@@ -160,6 +160,18 @@ function Loader:ADDON_LOADED(event, addon)
 		SetOverrideBindingClick(FastFocuser, true, "SHIFT-BUTTON1", "FastFocuser")
 	end
 
+	-- Visibilty Control
+	if ns.config.noCombatHide then
+		debug("Registering State Driver...")
+		RegisterStateDriver(VisiHUD_FullViewFrame, "visibility", "[combat][mod:ctrl,mod:shift] show; hide")
+		RegisterStateDriver(VisiHUD_IdleViewFrame, "visibility", "hide")
+	else
+		debug("Registering Alternate State Driver...")
+		RegisterStateDriver(VisiHUD_FullViewFrame, "visibility", "[combat][exists][mod:ctrl,mod:shift] show; hide")
+		RegisterStateDriver(VisiHUD_IdleViewFrame, "visibility", "[nocombat,noexists][mod:ctrl,mod:shift] show; hide")
+		--RegisterStateDriver(VisiHUD_IdleViewFrame, "visibility", "hide")
+	end
+
 	-- Cleanup
 	self:UnregisterEvent(event)
 	self.ADDON_LOADED = nil

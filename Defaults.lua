@@ -63,6 +63,7 @@ ns.configDefault = {
 	fastFocus = true,
 	expandZoom = true,
 	smooth = true,
+	noCombatHide = false,
 	debug = false
 
 }
@@ -72,6 +73,12 @@ ns.configDefault = {
 ns.uconfigDefault = {
 	player = {
 		point = "BOTTOMRIGHT UIParent CENTER -200 -200",
+		width = 1.3,
+		power = true,
+		castbar = true
+	},
+	playeridle = {
+		point = "BOTTOM UIParent CENTER 0 -300",
 		width = 1.3,
 		power = true,
 		castbar = true
