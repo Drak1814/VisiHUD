@@ -145,7 +145,7 @@ function Loader:ADDON_LOADED(event, addon)
 	end
 
 	-- FastFocus Key
-	if (ns.config.fastFocus) then
+	if ns.config.fastFocus then
 		debug("Enabling FastFocus")
 		--Blizzard raid frame
 		hooksecurefunc("CompactUnitFrame_SetUpFrame", function(frame, ...)
